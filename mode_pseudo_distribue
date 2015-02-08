@@ -1,17 +1,33 @@
 
-#
+# Mettre à jour les sources
 apt-get update
 
 # Installer java 6 ou une version plus récente
-echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu precise main" | tee -a /etc/apt/sources.list
-echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu precise main" | tee -a /etc/apt/sources.list
-apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
-apt-get install oracle-java7-installer
+sudo apt-get install default-jdk
 
-#
+# Vérifier si java est bien installé
+java -version
+
+# Setting variable d'environnement
+sudo nano ~/.bash_profile
+export JAVA_HOME=/etc/java-6-openjdk/
+export PATH=$PATH:/etc/java-6-openjdk/
+source ~/.bash_profile
+
+echo $JAVA_HOME
+
+# Installer ssh et sshd
+sudo apt-get install ssh
+sudo apt-get install openssh-client
+sudo apt-get install openssh-server
+sudo /etc/init.d/ssh restart
+
+# Créer un compte utilisateur hadoop
+sudo su
+useradd hadoop # mettre hadoop comme mot de passe
+su - hadoop
 
 
-#
 
 
 #
