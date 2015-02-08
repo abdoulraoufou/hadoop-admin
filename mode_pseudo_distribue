@@ -4,8 +4,8 @@
 # Mettre à jour le système
 apt-get update
 
-# Installer java 6 ou une version plus récente
-sudo apt-get install default-jdk
+# Installer java
+sudo apt-get install openjdk-7-jdk
 
 # Vérifier si java est bien installé
 java -version
@@ -14,8 +14,8 @@ java -version
 ## Créer un fichier .bash_profile
 sudo nano ~/.bash_profile
 ## Copier les ligns suivantes dans le fichier .bash_profile créer précédemment
-export JAVA_HOME=/etc/java-6-openjdk/
-export PATH=$PATH:/etc/java-6-openjdk/
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+export PATH=$PATH:/usr/lib/jvm/java-7-openjdk-amd64
 ## Lancer le fichier .bash_profile
 source ~/.bash_profile
 ## Vérifier si la source est bien mise à jour
@@ -45,17 +45,17 @@ ssh localhost
 exit
 exit
 
-#----------------------------------------------#
-# 2 - Installation d'hadoop - Cloudera - CDH5 -#
-#----------------------------------------------#
+#----------------------------------------------------------------#
+# 2 - Installation d'hadoop - Cloudera - CDH5 - Debian whezzy 7 -#
+#----------------------------------------------------------------#
 # Téléchargement des packages
-wget http://archive.cloudera.com/cdh5/one-click-install/precise/amd64/cdh5-repository_1.0_all.deb
+wget http://archive.cloudera.com/cdh5/one-click-install/wheezy/amd64/cdh5-repository_1.0_all.deb
 
 # Installation
 sudo dpkg -i cdh5-repository_1.0_all.deb
 
 # Ajouter la clé public GPC de Cloudera à votre entrepôt de paquets Debian
-curl -s http://archive.cloudera.com/cdh5/ubuntu/precise/amd64/cdh/archive.key | sudo apt-key add -
+curl -s http://archive.cloudera.com/cdh5/debian/wheezy/amd64/cdh/archive.key | sudo apt-key add -
 
 # Mise à jour du système
 sudo apt-get update
@@ -78,6 +78,7 @@ sudo apt-get install hadoop-mapreduce-historyserver
 # 3 - Fichier de configuration d'hadoop -#
 #----------------------------------------#
 # Depuis le fichier /etc/hadoop/conf/core-site.xml modifier le contenu afin d'obtenir le résultat ci-dessous:
+sudo nano /etc/hadoop/conf/core-site.xml
 """
 <configuration>
   <property>
@@ -96,6 +97,7 @@ sudo apt-get install hadoop-mapreduce-historyserver
 </configuration>
 """
 # Le fichier /etc/hadoop/conf/hdfs-site.xml contient les paramètres spécifiques au système de fichiers HDFS
+sudo nano /etc/hadoop/conf/hdfs-site.xml
 """
 <configuration>
   <property>
@@ -111,6 +113,7 @@ sudo apt-get install hadoop-mapreduce-historyserver
 # Le fichier /etc/hadoop/conf/mapred-site.xml contient les paramères spécifiques à MapReduce. 
 # Depuis la version 2.x d'Hadoop avec l'arrivée de Yarn, ce fichier de configuration est épaulé par yarn-site.xml. 
 # Ainsi, si on souhaite utiliser Yarn comme implémentation de MapReduce, il faudra configurer le fichier mapred-site.xml comme présenté ci-dessous
+sudo nano /etc/hadoop/conf/mapred-site.xml
 """
 <configuration>
   <property>
@@ -123,10 +126,33 @@ sudo apt-get install hadoop-mapreduce-historyserver
 sudo -u hdfs hdfs namenode -format
 
 # Créer un script pour demarrer les services HDFS et Yarn
-echo "#!/bin/bash\nfor service in /etc/init.d/hadoop-hdfs-*\ndo\n  sudo $service start\ndone\nfor service in /etc/init.d/hadoop-yarn-*\ndo\n  sudo $service start\ndone" > hadoop-start
+nano hadoop-start
+"""
+#!/bin/bash
+for service in /etc/init.d/hadoop-hdfs-*
+do
+  sudo $service start
+done
+for service in /etc/init.d/hadoop-yarn-*
+do  
+  sudo $service start
+  done
+"""
 
 # Créer un script pour arrêter les services HDFS et Yarn
-echo "#!/bin/bash\nfor service in /etc/init.d/hadoop-yarn-*\ndo\n  sudo $service stop\ndone\nfor service in /etc/init.d/hadoop-hdfs-*\ndo\n  sudo $service stop\ndone" > hadoop-stop
+nano hadoop-stop
+"""
+#!/bin/bash
+for service in /etc/init.d/hadoop-yarn-*
+do  
+  sudo $service stop
+done
+for service in /etc/init.d/hadoop-hdfs-*
+do
+  sudo $service stop
+done
+"""
+
 
 # Ajouter les droits d'exécution aux fichiers créés
 chmod +x hadoop-*
