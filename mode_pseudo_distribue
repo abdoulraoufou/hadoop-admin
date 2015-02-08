@@ -1,5 +1,7 @@
-
-# Mettre à jour les sources
+#-----------------#
+# 1 - Prérequis -#
+#-----------------#
+# Mettre à jour le système
 apt-get update
 
 # Installer java 6 ou une version plus récente
@@ -31,25 +33,112 @@ useradd hadoop # mettre hadoop comme mot de passe
 su - hadoop
 
 # Générer une clé ssh pour pouvoir ouvrir une session sur le noued sans fournir le mot de passe
-ssh-keygen -t rsa
+ssh-keygen -t rsa -P ""
 
 # Ajouter la clé publique à la liste des clés acceptées
-chmod 755 /home/hadoop/.ssh/id_rsa.pub
-ssh-copy-id -i /home/hadoop/.ssh/id_rsa.pub hadoop@localhost
+#chmod 755 /home/hadoop/.ssh/id_rsa.pub
+#chmod 700 /home/hadoop/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
-#
+# Tester la connexion au local host
+ssh localhost
+exit
+exit
 
+#----------------------------------------------#
+# 2 - Installation d'hadoop - Cloudera - CDH5 -#
+#----------------------------------------------#
+# Téléchargement des packages
+wget http://archive.cloudera.com/cdh5/one-click-install/precise/amd64/cdh5-repository_1.0_all.deb
 
-#
+# Installation
+sudo dpkg -i cdh5-repository_1.0_all.deb
 
+# Ajouter la clé public GPC de Cloudera à votre entrepôt de paquets Debian
+curl -s http://archive.cloudera.com/cdh5/ubuntu/precise/amd64/cdh/archive.key | sudo apt-key add -
 
-#
+# Mise à jour du système
+sudo apt-get update
 
+# Le système est maintenant prêt pour aller récupérer les paquets directement sur le serveur de Cloudera
 
-#
+# Le premier paquet à installer sera le gestionnaire de ressources (ResourceManager)
+sudo apt-get install hadoop-yarn-resourcemanager
 
+# Installer ensuite le paquet lié à la gestion des métadonnées (NameNode)
+sudo apt-get install hadoop-hdfs-namenode
 
-#
+# Installer les packages pour gérer les données (DataNode), le gestionnaire de nœuds (NodeManager) et finalement MapReduce
+sudo apt-get install hadoop-yarn-nodemanager hadoop-hdfs-datanode hadoop-mapreduce
 
+# Installer le paquet dédié au serveur d'historisation des informations des jobs MapReduce
+sudo apt-get install hadoop-mapreduce-historyserver
 
-#
+#----------------------------------------#
+# 3 - Fichier de configuration d'hadoop -#
+#----------------------------------------#
+# Depuis le fichier /etc/hadoop/conf/core-site.xml modifier le contenu afin d'obtenir le résultat ci-dessous:
+"""
+<configuration>
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://localhost:9000</value>
+    <description>The name of the default file system.</description>
+  </property>
+  <property>
+    <name>hadoop.proxyuser.hue.hosts</name>
+    <value>*</value>
+  </property>
+  <property>
+    <name>hadoop.proxyuser.hue.groups</name>
+    <value>*</value>
+  </property>
+</configuration>
+"""
+# Le fichier /etc/hadoop/conf/hdfs-site.xml contient les paramètres spécifiques au système de fichiers HDFS
+"""
+<configuration>
+  <property>
+    <name>dfs.replication</name>
+    <value>1</value>
+  </property>
+  <property>
+    <name>dfs.webhdfs.enabled</name>
+    <value>true</value>
+  </property>  
+</configuration>
+"""
+# Le fichier /etc/hadoop/conf/mapred-site.xml contient les paramères spécifiques à MapReduce. 
+# Depuis la version 2.x d'Hadoop avec l'arrivée de Yarn, ce fichier de configuration est épaulé par yarn-site.xml. 
+# Ainsi, si on souhaite utiliser Yarn comme implémentation de MapReduce, il faudra configurer le fichier mapred-site.xml comme présenté ci-dessous
+"""
+<configuration>
+  <property>
+    <name>mapreduce.framework.name</name>
+    <value>yarn</value>
+  </property>
+</configuration>
+"""
+# Initialisation de HDFS
+sudo -u hdfs hdfs namenode -format
+
+# Créer un script pour demarrer les services HDFS et Yarn
+echo "#!/bin/bash\nfor service in /etc/init.d/hadoop-hdfs-*\ndo\n  sudo $service start\ndone\nfor service in /etc/init.d/hadoop-yarn-*\ndo\n  sudo $service start\ndone" > hadoop-start
+
+# Créer un script pour arrêter les services HDFS et Yarn
+echo "#!/bin/bash\nfor service in /etc/init.d/hadoop-yarn-*\ndo\n  sudo $service stop\ndone\nfor service in /etc/init.d/hadoop-hdfs-*\ndo\n  sudo $service stop\ndone" > hadoop-stop
+
+# Ajouter les droits d'exécution aux fichiers créés
+chmod +x hadoop-*
+
+# Pour exécuter
+./hadoop-start
+./hadoop-stop
+
+#-----------------------------------------------#
+#- Les Interfaces utilisateur d'administration -#
+#-----------------------------------------------#
+# L'état du cluster et est accessible via l'adressse http://localhost:8088.
+# L'historique des jobs MapReduce est accessible via l'adresse http://localhost:19888/jobhistory
+# L'accès aux données contenues dans le nœud NameNode et est accessible via l'adresse http://localhost:50070
+
