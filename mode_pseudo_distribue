@@ -30,8 +30,12 @@ sudo su
 useradd hadoop # mettre hadoop comme mot de passe
 su - hadoop
 
+# Générer une clé ssh pour pouvoir ouvrir une session sur le noued sans fournir le mot de passe
+ssh-keygen -t rsa
 
-
+# Ajouter la clé publique à la liste des clés acceptées
+chmod 755 /home/hadoop/.ssh/id_rsa.pub
+ssh-copy-id -i /home/hadoop/.ssh/id_rsa.pub hadoop@localhost
 
 #
 
