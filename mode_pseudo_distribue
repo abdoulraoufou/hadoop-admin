@@ -9,11 +9,14 @@ sudo apt-get install default-jdk
 java -version
 
 # Setting variable d'environnement
+## Créer un fichier .bash_profile
 sudo nano ~/.bash_profile
+## Copier les ligns suivantes dans le fichier .bash_profile créer précédemment
 export JAVA_HOME=/etc/java-6-openjdk/
 export PATH=$PATH:/etc/java-6-openjdk/
+## Lancer le fichier .bash_profile
 source ~/.bash_profile
-
+## Vérifier si la source est bien mise à jour
 echo $JAVA_HOME
 
 # Installer ssh et sshd
