@@ -2,7 +2,7 @@
 # 1 - Prérequis -#
 #-----------------#
 # Mettre à jour le système
-apt-get update
+sudo apt-get update
 
 # Installer java
 sudo apt-get install openjdk-7-jdk
@@ -28,8 +28,8 @@ sudo apt-get install openssh-server
 sudo /etc/init.d/ssh restart
 
 # Créer un compte utilisateur hadoop
-sudo su
-useradd hadoop # mettre hadoop comme mot de passe
+sudo useradd hadoop # mettre hadoop comme mot de passe
+sudo adduser hadoop sudo # l'utilisateur hadoop est ajouté dans la liste des users sudoers
 su - hadoop
 
 # Générer une clé ssh pour pouvoir ouvrir une session sur le noued sans fournir le mot de passe
@@ -42,7 +42,6 @@ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
 # Tester la connexion au local host
 ssh localhost
-exit
 exit
 
 #----------------------------------------------------------------#
@@ -164,7 +163,7 @@ chmod +x hadoop-*
 #-----------------------------------------------#
 #- Les Interfaces utilisateur d'administration -#
 #-----------------------------------------------#
-# L'état du cluster et est accessible via l'adressse http://localhost:8088.
+# L'état du cluster et est accessible via l'adressse http://localhost:8088 or IP:8088
 # L'historique des jobs MapReduce est accessible via l'adresse http://localhost:19888/jobhistory
 # L'accès aux données contenues dans le nœud NameNode et est accessible via l'adresse http://localhost:50070
 
