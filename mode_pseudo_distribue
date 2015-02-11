@@ -45,7 +45,7 @@ ssh localhost
 exit
 
 #----------------------------------------------------------------#
-# 2 - Installation d'hadoop - Cloudera - CDH5 - Debian whezzy 7 -#
+# 2 - Installation d'hadoop - Cloudera - CDH5 - Debian wheezy 7 -#
 #----------------------------------------------------------------#
 # Téléchargement des packages
 wget http://archive.cloudera.com/cdh5/one-click-install/wheezy/amd64/cdh5-repository_1.0_all.deb
