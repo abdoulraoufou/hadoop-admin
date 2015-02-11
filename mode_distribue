@@ -5,7 +5,10 @@ sudo nano /etc/hosts
 
 # Ajouter le code suivant dans le fichier /etc/hosts
 """
-<IP> abdoop-cluster-maitre
-<IP>
-<IP>
-<IP>
+<IP> abdoop-cluster-maitre # par exemple: 130.211.166.44 abdoop-cluster-maitre
+<IP> abdoop-cluster-slave1
+<IP> abdoop-cluster-slave2
+<IP> abdoop-cluster-slave3
+<IP> abdoop-cluster-slave4
+<IP> abdoop-cluster-slave5
+"""
