@@ -1,1 +1,11 @@
-#
+# 6 machines virtuelles debian wheezy. 1 machine maitre (NameNode) et 5 machines esclaves (DataNode). 
+
+# Paramétrer le fichier /etc/hosts de chaque noeud
+sudo nano /etc/hosts
+
+# Ajouter le code suivant dans le fichier /etc/hosts
+"""
+<IP> abdoop-cluster-maitre
+<IP>
+<IP>
+<IP>
