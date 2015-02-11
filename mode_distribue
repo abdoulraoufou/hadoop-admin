@@ -12,3 +12,24 @@ sudo nano /etc/hosts
 <IP> abdoop-cluster-slave4
 <IP> abdoop-cluster-slave5
 """
+
+# Désactiver le mot de passe du compte utilisateur hadoopmanager
+sudo nano /etc/sudoers
+# Ajouter ce code dans le fichier /etc/sudoers
+"""
+hadoopmanager     ALL=NOPASSWD: ALL
+"""
+
+#--------------------------------------------------------#
+#- Installation et configuration d'un cluster multinœud -#
+#--------------------------------------------------------#
+# Installation Cloudera Manager dans abdoop-cluster-maitre
+wget http://archive-primary.cloudera.com/cm5/installer/5.1.2/cloudera-manager-installer.bin
+
+# Modifier les droits afin d'autoriser l'exécution puis exécuter le binaire en root
+chmod u+x cloudera-manager-installer.bin
+sudo ./cloudera-manager-installer.bin
+
+# Installation d'un cluster trois nœuds
+
+
