@@ -13,12 +13,22 @@ sudo nano /etc/hosts
 <IP> abdoop-cluster-slave5
 """
 
+# Générer une clé ssh pour pouvoir ouvrir une session sur le noued sans fournir le mot de passe
+ssh-keygen -t rsa -P ""
+
+# Ajouter la clé publique à la liste des clés acceptées
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+# Ajouter l'utilisateur hadoopmanager
+adduser hadoopmanager
+
 # Désactiver le mot de passe du compte utilisateur hadoopmanager
 sudo nano /etc/sudoers
 # Ajouter ce code dans le fichier /etc/sudoers
 """
 hadoopmanager     ALL=NOPASSWD: ALL
 """
+
 
 #--------------------------------------------------------#
 #- Installation et configuration d'un cluster multinœud -#
