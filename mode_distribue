@@ -20,7 +20,7 @@ ssh-keygen -t rsa -P ""
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
 # Ajouter l'utilisateur hadoopmanager
-adduser hadoopmanager
+sudo adduser hadoopmanager # mot de passe: hadoop
 
 # Désactiver le mot de passe du compte utilisateur hadoopmanager
 sudo nano /etc/sudoers
