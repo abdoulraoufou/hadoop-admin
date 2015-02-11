@@ -1,0 +1,46 @@
+# J'ai 6 VM. Une machine maitre (NameNode) et cinq machines esclaves (DataNode).
+
+#-------------#
+#- Prérequis -#
+#-------------#
+# Copier le script suivant dans chaque VM. Penser à supprimer 127.0.1.1.
+sudo nano /etc/hosts
+""" 
+130.211.124.26 abdoop-cluster-maitre
+130.211.166.44 abdoop-cluster-slave1
+130.211.163.28 abdoop-cluster-slave2
+146.148.37.30 abdoop-cluster-slave3
+104.154.48.30 abdoop-cluster-slave4
+104.155.224.117 abdoop-cluster-slave5
+"""
+
+# Désactiver le mot de passe du compte utilisateur hadoopmanager
+sudo nano /etc/sudoers
+"""
+hadoopmanager     ALL=NOPASSWD: ALL
+"""
+
+# Installer Apache
+sudo apt-get install apache2
+
+# Redemarrer le serveur
+sudo /etc/init.d/apache2 restart
+
+
+#----------------#
+#- Installation -#
+#----------------#
+# Dans abdoop-cluster-maitre
+wget http://archive-primary.cloudera.com/cm5/installer/5.1.2/cloudera-manager-installer.bin
+
+# Modifier les droits afin d'autoriser l'exécution puis exécuter le binaire en root
+chmod u+x cloudera-manager-installer.bin
+sudo ./cloudera-manager-installer.bin
+
+
+
+# Cloudera manager est accessible sur http://s-virtual-machine1:7180
+# Par défaut nom d'utilisateur et mot de passe sont admin et admin.
+
+
+
