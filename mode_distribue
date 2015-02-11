@@ -22,11 +22,23 @@ cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 # Ajouter l'utilisateur hadoopmanager
 sudo adduser hadoopmanager # mot de passe: hadoop
 
+# Ajouter une clé ssh dans les metadonnées gce
+gcloud auth login
+gcloud compute ssh hadoopmanager@abdoop-cluster-maitre
+
+# Configuer un acces ssh classique sur gce
+eval `ssh-agent`
+ssh-add ~/.ssh/google_compute_engine
+
+# tester la connexion ssh claasique sur gce
+ssh hadoopmanager@abdoop-cluster-maitre
+
 # Désactiver le mot de passe du compte utilisateur hadoopmanager
 sudo nano /etc/sudoers
 # Ajouter ce code dans le fichier /etc/sudoers
 """
 hadoopmanager     ALL=NOPASSWD: ALL
+araoufougambo_netbooster_com ALL=NOPASSWD: ALL
 """
 
 
