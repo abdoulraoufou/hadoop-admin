@@ -1,29 +1,21 @@
 # 6 machines virtuelles debian wheezy. 1 machine maitre (NameNode) et 5 machines esclaves (DataNode). 
 
+# Faire ifconfig pour trouver l'IP qui repond sur eth0. C'est cette IP qui sera par la suite utilisée dans /etc/hosts
+ifconfig -a
+
 # Paramétrer le fichier /etc/hosts de chaque noeud
 sudo nano /etc/hosts
 
 # Ajouter le code suivant dans le fichier /etc/hosts
 """
-<IP> abdoop-cluster-maitre # par exemple: 130.211.166.44 abdoop-cluster-maitre
-<IP> abdoop-cluster-slave1
-<IP> abdoop-cluster-slave2
-<IP> abdoop-cluster-slave3
-<IP> abdoop-cluster-slave4
-<IP> abdoop-cluster-slave5
+abdoop-cluster-maitre 10.240.41.135 
+abdoop-cluster-slave1 10.240.173.163 
+abdoop-cluster-slave2 10.240.162.217 
+abdoop-cluster-slave3 10.240.40.36
 """
 
 # Ajouter l'utilisateur hadoopmanager
 sudo adduser hadoopmanager # mot de passe: hadoop
-
-# Générer une clé ssh pour pouvoir ouvrir une session sur le noued sans fournir le mot de passe
-ssh-keygen -t rsa -P ""
-
-# Ajouter la clé publique à la liste des clés acceptées
-cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-
-# Copie de la clé publique sur les machines du cluster
-ssh-copy-id -i ~/.ssh/id_rsa.pub hadoopmanager@abdoop-cluster-slave1
 
 # Désactiver le mot de passe du compte utilisateur hadoopmanager
 sudo nano /etc/sudoers
@@ -33,16 +25,11 @@ hadoopmanager     ALL=NOPASSWD: ALL
 araoufougambo_netbooster_com ALL=NOPASSWD: ALL
 """
 
-# tester la connexion ssh claasique sur gce
-ssh hadoopmanager@abdoop-cluster-maitre
+# Générer une clé ssh sur le noeud maitre pour pouvoir ouvrir une session sur le noued sans fournir le mot de passe
+ssh-keygen -t rsa -P ""
 
-# Ajouter une clé ssh dans les metadonnées gce
-gcloud auth login
-gcloud compute ssh hadoopmanager@abdoop-cluster-maitre
-
-# Configuer un acces ssh classique sur gce
-eval `ssh-agent`
-ssh-add ~/.ssh/google_compute_engine
+# Ajouter la clé publique à la liste des clés acceptées
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
 #--------------------------------------------------------#
 #- Installation et configuration d'un cluster multinœud -#
