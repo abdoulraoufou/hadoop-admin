@@ -1,0 +1,20 @@
+# Initialisation du jeu de données
+## Création d'un script shell qui ajoute le contenu d'un fichier en entrée n fois dans un fichier en sortie
+nano createbigfile.sh
+"""
+#!/bin/bash
+OUTPUT=${2:-bigfile.txt}
+ITERATE=${3:-10000}
+
+for ((c=1; c<=$ITERATE; c++))
+do
+    cat $1 >> $OUTPUT
+done
+"""
+
+## Télécharger le fichier en entrée et le nommé 100.txt
+https://www.gutenberg.org/cache/epub/100/pg100.txt
+
+## Excécution du shell créé
+./createbigfile.sh 100.txt 50big100.txt 10000
+
