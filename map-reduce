@@ -18,3 +18,34 @@ https://www.gutenberg.org/cache/epub/100/pg100.txt
 ## Excécution du shell créé
 ./createbigfile.sh 100.txt 50big100.txt 10000
 
+
+# Import des données dans HDFS
+sudo -u hdfs hadoop fs -put 50big100.txt /user/hdfs/books/50big100.txt
+
+# Programme java de comptage de mot
+#Le programme java qui permet de lancer le job map-reduce est  dans le fichier WordCounterMultiThread.java
+
+
+# Configuration du job MapReduce
+sudo -u hdfs hadoop fs -put hadoop-mapreduce-examples.jar /user/hdfs
+
+# Lancement manuelle du job map-reduce
+"""
+Se connecter à l'interface cloudera http://IP:8888
+sélectionnez le menu Éditeurs de requêtes, puis cliquez sur Job Designer.
+Choisissez Nouvelle Action et sélectionnez Java
+Saisissez ensuite, les valeurs comme cela est indiquée ci-dessous :
+    Nom : WordCount ;
+    Chemin des fichiers Jar : /user/hdfs/hadoop-mapreduce-examples.jar ;
+    Main Class : org.apache.hadoop.examples.WordCount ;
+    Args : /user/hdfs/books /user/hdfs/output.
+"""
+
+# Lancement automatique d'un job map-reduce
+sudo -u hdfs hadoop jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar wordcount /user/hdfs/books /user/hdfs/output
+
+
+
+
+
+
