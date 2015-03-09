@@ -29,15 +29,15 @@ araoufougambo_netbooster_com ALL=NOPASSWD: ALL
 """
 
 # Générer une clé ssh sur le noeud maitre pour pouvoir ouvrir une session sur le noued sans fournir le mot de passe
-#ssh-keygen -t rsa -P ""
-ssh-keygen -t dsa
+ssh-keygen -t rsa -P ""
 
 # Ajouter la clé publique à la liste des clés acceptées
-#cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
 # Copier la clé publique sur les autres machines du cluster
+## 1-via ssh-copy-id
 ssh-copy-id -i ~/.ssh/id_dsa.pub hadoopmanager@abdoop-cluster-maitre-bis
+## 2-Copier la clé dans les métadonnées (cas de google compute engine)
 
 #--------------------------------------------------------#
 #- Installation et configuration d'un cluster multinœud -#
