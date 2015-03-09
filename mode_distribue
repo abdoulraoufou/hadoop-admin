@@ -49,6 +49,6 @@ wget http://archive-primary.cloudera.com/cm5/installer/5.1.2/cloudera-manager-in
 chmod u+x cloudera-manager-installer.bin
 sudo ./cloudera-manager-installer.bin
 
-# Installation d'un cluster trois nœuds
+# Suivre l'interface graphique pour la suite d'installation.
 
 
