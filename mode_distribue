@@ -8,13 +8,12 @@ sudo nano /etc/hosts
 
 # Ajouter le code suivant dans le fichier /etc/hosts
 """
-abdoop-cluster-maitre 10.240.125.116
-abdoop-cluster-maitre-bis 10.240.31.131
-abdoop-cluster-slave1 10.240.173.163 
-abdoop-cluster-slave2 10.240.162.217 
-abdoop-cluster-slave3 10.240.40.36 
-abdoop-cluster-slave4 10.240.129.114 
-abdoop-cluster-slave5 10.240.48.112
+abdoop-cluster-maitre 10.240.59.241
+abdoop-cluster-maitre-bis 10.240.2.19
+abdoop-cluster-slave1 10.240.92.7
+abdoop-cluster-slave2 10.240.81.222
+abdoop-cluster-slave3 10.240.207.173
+abdoop-cluster-slave4 10.240.83.26 
 """
 
 # Ajouter l'utilisateur hadoopmanager
@@ -30,9 +29,6 @@ araoufougambo_netbooster_com ALL=NOPASSWD: ALL
 
 # Générer une clé ssh sur le noeud maitre pour pouvoir ouvrir une session sur le noued sans fournir le mot de passe
 ssh-keygen -t rsa -P ""
-
-# Ajouter la clé publique à la liste des clés acceptées
-cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
 # Copier la clé publique sur les autres machines du cluster
 ## 1-via ssh-copy-id
