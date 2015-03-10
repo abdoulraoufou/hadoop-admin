@@ -47,4 +47,14 @@ sudo ./cloudera-manager-installer.bin
 
 # Suivre l'interface graphique pour la suite d'installation.
 
+#---------------------------------#
+#- Type of error of installation -#
+#---------------------------------#
+"""
+Cloudera recommande de définir /proc/sys/vm/swappiness sur 0. Le paramètre actuel est 60. 
+Utilisez la commande sysctl pour modifier ce paramètre lors de l'exécution et modifiez /etc/sysctl.conf 
+pour que ce paramètre soit sauvegardé après un redémarrage.
+"""
+sudo sh -c "echo 0 > /proc/sys/vm/swappiness"
+sysctl -w vm.swappiness=0 
 
