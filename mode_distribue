@@ -56,5 +56,5 @@ Utilisez la commande sysctl pour modifier ce paramètre lors de l'exécution et 
 pour que ce paramètre soit sauvegardé après un redémarrage.
 """
 sudo sh -c "echo 0 > /proc/sys/vm/swappiness"
-sysctl -w vm.swappiness=0 
+sudo sysctl -w vm.swappiness=0 
 sudo sh -c "echo 'vm_swappiness = 0' >> /etc/sysctl.conf"
